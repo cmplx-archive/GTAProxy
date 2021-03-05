@@ -1,5 +1,11 @@
 #include "minhook/MinHook.h"
+#include "strink.h"
 #include <stdint.h>
+#include <Psapi.h>
+#include <TlHelp32.h>
+#include <Windows.h>
+
+#define MsgBox(text) MessageBoxA(0, text, "debug", 0)
 
 typedef void(__fastcall* netcat_insert_direct_t)(uint64_t catalog, uint64_t* key, uint64_t** item);
 netcat_insert_direct_t netcat_insert_direct = NULL;
@@ -13,6 +19,33 @@ HANDLE g_uninject_thread = NULL;
 uint64_t netcat_insert_dedupe_addr = 0;
 uint64_t strlen_addr = 0;
 
+int strlen_calls = 0;
+
+MODULEINFO GetModuleInfo(char* szModule) {
+	MODULEINFO modInfo = {0};
+	HMODULE hModule = GetModuleHandleA(szModule);
+	if(hModule != 0)
+		GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
+	return modInfo;
+}
+
+uint64_t FindSig(char* module, char* pattern, char* mask) {
+	MODULEINFO mInfo = GetModuleInfo(module);
+	uint64_t base = (uint64_t)mInfo.lpBaseOfDll;
+	uint64_t size = (uint64_t)mInfo.SizeOfImage;
+	uint64_t patternLength = cmplx::strlen(mask);
+
+	for(uint64_t i = 0; i < size - patternLength; i++) {
+
+		bool found = true;
+		for(uint64_t j = 0; j < patternLength; j++) found &= mask[j] == '?' || pattern[j] == *(char*)(base + i + j);
+
+		if(found)
+			return base + i;
+	}
+	return 0;
+}
+
 // not-really-safe strlen
 // comes with a built in "cache" for exactly one item
 size_t strlen_cacher(char* str) {
@@ -20,6 +53,8 @@ size_t strlen_cacher(char* str) {
 	static char* end = NULL;
 	size_t len = 0;
 	const size_t cap = 20000;
+
+	strlen_calls++;
 
 	// if we have a "cached" string and current pointer is within it
 	if(start && str >= start && str <= end) {
@@ -77,10 +112,17 @@ void init_patch() {
 	// set up function hooks
 	// addresses hardcoded for Steam version 2215/1.53
 	uint64_t base_addr = (uint64_t)GetModuleHandleA(NULL);
-	netcat_insert_dedupe_addr = base_addr + 0x10AA918;
-	strlen_addr = base_addr + 0x17C01A0;
+	//netcat_insert_dedupe_addr = base_addr + 0x10AA918;
+	//strlen_addr = base_addr + 0x17C01A0;
 
-	netcat_insert_direct = (netcat_insert_direct_t)(base_addr + 0x5BB07C);
+	netcat_insert_dedupe_addr = FindSig("GTA5.exe", "\x48\x89\x5C\x24\x00\x4C\x89\x44\x24\x00\x57\x48\x83\xEC\x20\x48\x8B\xFA\x4D\x85\xC0", "xxxx?xxxx?xxxxxxxxxxx");
+	strlen_addr = FindSig("GTA5.exe", "\x48\x8B\xC1\x48\xF7\xD9\x48\xA9\x00\x00\x00\x00\x74\x0F\x66\x90", "xxxxxxxx????xxxx");
+	uint64_t insert_sig = FindSig("GTA5.exe", "\xE8\x00\x00\x00\x00\x48\x8D\x1D\x00\x00\x00\x00\x4C\x8D\x45\x18\x48\x8D\x55\x10", "x????xxx????xxxxxxxx");
+	netcat_insert_direct = (netcat_insert_direct_t)((insert_sig + 1) + *(int32_t*)(insert_sig + 1) + 4); 
+
+	//MsgBox(str("nc_insert_dedupe: " + (void*)netcat_insert_dedupe_addr + " orig " + (void*)(base_addr + 0x10AA918)));
+	//MsgBox(str("strlen_addr: " + (void*)strlen_addr + " orig " + (void*)(base_addr + 0x17C01A0)));
+	//MsgBox(str("netcat_insert: " + (void*)netcat_insert_direct + " orig " + (void*)(base_addr + 0x5BB07C)));
 
 	MH_Initialize();
 

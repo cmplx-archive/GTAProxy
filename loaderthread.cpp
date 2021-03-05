@@ -1,4 +1,9 @@
 #include <windows.h>
+#include "strink.h"
+
+#define MsgBox(text) MessageBoxA(0, text, "debug", 0)
+
+extern "C" int strlen_calls;
 
 int thread() {
 	while(1){
@@ -22,6 +27,11 @@ int thread() {
 			if(GetOpenFileNameA(&ofn)) 
 				LoadLibraryA(ofn.lpstrFile);
 			
+		}
+
+		// ctrl + num6
+		if(GetAsyncKeyState(VK_CONTROL) && GetAsyncKeyState(VK_NUMPAD6)){
+			MsgBox(str("strlen calls: " + strlen_calls));
 		}
 
 		Sleep(5);
