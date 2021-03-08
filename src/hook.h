@@ -1,6 +1,16 @@
+#ifndef PROXY_H
+#define PROXY_H
+
+#undef UNICODE // gcc does not play well with Unicode.
 #include <windows.h>
 
 #define LIBNAME "bink2w64org.dll"
+
+// bcause r* is retarded and calling functions in the dll by GetProcAddr(LoadLibA("bink2w64.dll"), function)();
+bool initialized = false;
+
+// do in there whatever you want
+void attach(HMODULE);
 
 struct bink2w64_dll { 
 	HMODULE dll;
@@ -95,88 +105,88 @@ struct bink2w64_dll {
 extern "C"
 {
 	JMPProxy(FakeBinkBufferBlit, bink2w64.OrignalBinkBufferBlit)
-	NAKED void FakeBinkBufferCheckWinPos() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferCheckWinPos)); }
-	NAKED void FakeBinkBufferClear() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferClear)); }
-	NAKED void FakeBinkBufferClose() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferClose)); }
-	NAKED void FakeBinkBufferGetDescription() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferGetDescription)); }
-	NAKED void FakeBinkBufferGetError() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferGetError)); }
-	NAKED void FakeBinkBufferLock() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferLock)); }
-	NAKED void FakeBinkBufferOpen() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferOpen)); }
-	NAKED void FakeBinkBufferSetDirectDraw() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferSetDirectDraw)); }
-	NAKED void FakeBinkBufferSetHWND() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferSetHWND)); }
-	NAKED void FakeBinkBufferSetOffset() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferSetOffset)); }
-	NAKED void FakeBinkBufferSetResolution() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferSetResolution)); }
-	NAKED void FakeBinkBufferSetScale() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferSetScale)); }
-	NAKED void FakeBinkBufferUnlock() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkBufferUnlock)); }
-	NAKED void FakeBinkCheckCursor() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkCheckCursor)); }
-	NAKED void FakeBinkClose() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkClose)); }
-	NAKED void FakeBinkCloseTrack() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkCloseTrack)); }
-	NAKED void FakeBinkControlBackgroundIO() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkControlBackgroundIO)); }
-	NAKED void FakeBinkControlPlatformFeatures() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkControlPlatformFeatures)); }
-	NAKED void FakeBinkCopyToBuffer() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkCopyToBuffer)); }
-	NAKED void FakeBinkCopyToBufferRect() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkCopyToBufferRect)); }
-	NAKED void FakeBinkDDSurfaceType() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDDSurfaceType)); }
-	NAKED void FakeBinkDX8SurfaceType() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDX8SurfaceType)); }
-	NAKED void FakeBinkDX9SurfaceType() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDX9SurfaceType)); }
-	NAKED void FakeBinkDoFrame() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDoFrame)); }
-	NAKED void FakeBinkDoFrameAsync() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDoFrameAsync)); }
-	NAKED void FakeBinkDoFrameAsyncMulti() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDoFrameAsyncMulti)); }
-	NAKED void FakeBinkDoFrameAsyncWait() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDoFrameAsyncWait)); }
-	NAKED void FakeBinkDoFramePlane() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkDoFramePlane)); }
-	NAKED void FakeBinkFreeGlobals() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkFreeGlobals)); }
-	NAKED void FakeBinkGetError() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetError)); }
-	NAKED void FakeBinkGetFrameBuffersInfo() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetFrameBuffersInfo)); }
-	NAKED void FakeBinkGetGPUDataBuffersInfo() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetGPUDataBuffersInfo)); }
-	NAKED void FakeBinkGetKeyFrame() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetKeyFrame)); }
-	NAKED void FakeBinkGetPalette() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetPalette)); }
-	NAKED void FakeBinkGetPlatformInfo() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetPlatformInfo)); }
-	NAKED void FakeBinkGetRealtime() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetRealtime)); }
-	NAKED void FakeBinkGetRects() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetRects)); }
-	NAKED void FakeBinkGetSummary() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetSummary)); }
-	NAKED void FakeBinkGetTrackData() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetTrackData)); }
-	NAKED void FakeBinkGetTrackID() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetTrackID)); }
-	NAKED void FakeBinkGetTrackMaxSize() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetTrackMaxSize)); }
-	NAKED void FakeBinkGetTrackType() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGetTrackType)); }
-	NAKED void FakeBinkGoto() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkGoto)); }
-	NAKED void FakeBinkIsSoftwareCursor() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkIsSoftwareCursor)); }
-	NAKED void FakeBinkLogoAddress() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkLogoAddress)); }
-	NAKED void FakeBinkNextFrame() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkNextFrame)); }
-	NAKED void FakeBinkOpen() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpen)); }
-	NAKED void FakeBinkOpenDirectSound() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpenDirectSound)); }
-	NAKED void FakeBinkOpenMiles() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpenMiles)); }
-	NAKED void FakeBinkOpenTrack() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpenTrack)); }
-	NAKED void FakeBinkOpenWaveOut() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpenWaveOut)); }
-	NAKED void FakeBinkOpenWithOptions() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpenWithOptions)); }
-	NAKED void FakeBinkOpenXAudio2() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkOpenXAudio2)); }
-	NAKED void FakeBinkPause() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkPause)); }
-	NAKED void FakeBinkRegisterFrameBuffers() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkRegisterFrameBuffers)); }
-	NAKED void FakeBinkRegisterGPUDataBuffers() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkRegisterGPUDataBuffers)); }
-	NAKED void FakeBinkRequestStopAsyncThread() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkRequestStopAsyncThread)); }
-	NAKED void FakeBinkRestoreCursor() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkRestoreCursor)); }
-	NAKED void FakeBinkService() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkService)); }
-	NAKED void FakeBinkSetError() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetError)); }
-	NAKED void FakeBinkSetFileOffset() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetFileOffset)); }
-	NAKED void FakeBinkSetFrameRate() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetFrameRate)); }
-	NAKED void FakeBinkSetIO() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetIO)); }
-	NAKED void FakeBinkSetIOSize() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetIOSize)); }
-	NAKED void FakeBinkSetMemory() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetMemory)); }
-	NAKED void FakeBinkSetPan() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetPan)); }
-	NAKED void FakeBinkSetSimulate() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetSimulate)); }
-	NAKED void FakeBinkSetSoundOnOff() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetSoundOnOff)); }
-	NAKED void FakeBinkSetSoundSystem() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetSoundSystem)); }
-	NAKED void FakeBinkSetSoundSystem2() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetSoundSystem2)); }
-	NAKED void FakeBinkSetSoundTrack() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetSoundTrack)); }
-	NAKED void FakeBinkSetSpeakerVolumes() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetSpeakerVolumes)); }
-	NAKED void FakeBinkSetVideoOnOff() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetVideoOnOff)); }
-	NAKED void FakeBinkSetVolume() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetVolume)); }
-	NAKED void FakeBinkSetWillLoop() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkSetWillLoop)); }
-	NAKED void FakeBinkShouldSkip() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkShouldSkip)); }
-	NAKED void FakeBinkStartAsyncThread() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkStartAsyncThread)); }
-	NAKED void FakeBinkUseTelemetry() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkUseTelemetry)); }
-	NAKED void FakeBinkUseTmLite() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkUseTmLite)); }
-	NAKED void FakeBinkWait() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkWait)); }
-	NAKED void FakeBinkWaitStopAsyncThread() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalBinkWaitStopAsyncThread)); }
-	NAKED void FakeRADTimerRead() { asm volatile("jmp *%0" : : "r" (bink2w64.OrignalRADTimerRead)); }
+	JMPProxy(FakeBinkBufferCheckWinPos,bink2w64.OrignalBinkBufferCheckWinPos)
+	JMPProxy(FakeBinkBufferClear,bink2w64.OrignalBinkBufferClear)
+	JMPProxy(FakeBinkBufferClose,bink2w64.OrignalBinkBufferClose)
+	JMPProxy(FakeBinkBufferGetDescription,bink2w64.OrignalBinkBufferGetDescription)
+	JMPProxy(FakeBinkBufferGetError,bink2w64.OrignalBinkBufferGetError)
+	JMPProxy(FakeBinkBufferLock,bink2w64.OrignalBinkBufferLock)
+	JMPProxy(FakeBinkBufferOpen,bink2w64.OrignalBinkBufferOpen)
+	JMPProxy(FakeBinkBufferSetDirectDraw,bink2w64.OrignalBinkBufferSetDirectDraw)
+	JMPProxy(FakeBinkBufferSetHWND,bink2w64.OrignalBinkBufferSetHWND)
+	JMPProxy(FakeBinkBufferSetOffset,bink2w64.OrignalBinkBufferSetOffset)
+	JMPProxy(FakeBinkBufferSetResolution,bink2w64.OrignalBinkBufferSetResolution)
+	JMPProxy(FakeBinkBufferSetScale,bink2w64.OrignalBinkBufferSetScale)
+	JMPProxy(FakeBinkBufferUnlock,bink2w64.OrignalBinkBufferUnlock)
+	JMPProxy(FakeBinkCheckCursor,bink2w64.OrignalBinkCheckCursor)
+	JMPProxy(FakeBinkClose,bink2w64.OrignalBinkClose)
+	JMPProxy(FakeBinkCloseTrack,bink2w64.OrignalBinkCloseTrack)
+	JMPProxy(FakeBinkControlBackgroundIO,bink2w64.OrignalBinkControlBackgroundIO)
+	JMPProxy(FakeBinkControlPlatformFeatures,bink2w64.OrignalBinkControlPlatformFeatures)
+	JMPProxy(FakeBinkCopyToBuffer,bink2w64.OrignalBinkCopyToBuffer)
+	JMPProxy(FakeBinkCopyToBufferRect,bink2w64.OrignalBinkCopyToBufferRect)
+	JMPProxy(FakeBinkDDSurfaceType,bink2w64.OrignalBinkDDSurfaceType)
+	JMPProxy(FakeBinkDX8SurfaceType,bink2w64.OrignalBinkDX8SurfaceType)
+	JMPProxy(FakeBinkDX9SurfaceType,bink2w64.OrignalBinkDX9SurfaceType)
+	JMPProxy(FakeBinkDoFrame,bink2w64.OrignalBinkDoFrame)
+	JMPProxy(FakeBinkDoFrameAsync,bink2w64.OrignalBinkDoFrameAsync)
+	JMPProxy(FakeBinkDoFrameAsyncMulti,bink2w64.OrignalBinkDoFrameAsyncMulti)
+	JMPProxy(FakeBinkDoFrameAsyncWait,bink2w64.OrignalBinkDoFrameAsyncWait)
+	JMPProxy(FakeBinkDoFramePlane,bink2w64.OrignalBinkDoFramePlane)
+	JMPProxy(FakeBinkFreeGlobals,bink2w64.OrignalBinkFreeGlobals)
+	JMPProxy(FakeBinkGetError,bink2w64.OrignalBinkGetError)
+	JMPProxy(FakeBinkGetFrameBuffersInfo,bink2w64.OrignalBinkGetFrameBuffersInfo)
+	JMPProxy(FakeBinkGetGPUDataBuffersInfo,bink2w64.OrignalBinkGetGPUDataBuffersInfo)
+	JMPProxy(FakeBinkGetKeyFrame,bink2w64.OrignalBinkGetKeyFrame)
+	JMPProxy(FakeBinkGetPalette,bink2w64.OrignalBinkGetPalette)
+	JMPProxy(FakeBinkGetPlatformInfo,bink2w64.OrignalBinkGetPlatformInfo)
+	JMPProxy(FakeBinkGetRealtime,bink2w64.OrignalBinkGetRealtime)
+	JMPProxy(FakeBinkGetRects,bink2w64.OrignalBinkGetRects)
+	JMPProxy(FakeBinkGetSummary,bink2w64.OrignalBinkGetSummary)
+	JMPProxy(FakeBinkGetTrackData,bink2w64.OrignalBinkGetTrackData)
+	JMPProxy(FakeBinkGetTrackID,bink2w64.OrignalBinkGetTrackID)
+	JMPProxy(FakeBinkGetTrackMaxSize,bink2w64.OrignalBinkGetTrackMaxSize)
+	JMPProxy(FakeBinkGetTrackType,bink2w64.OrignalBinkGetTrackType)
+	JMPProxy(FakeBinkGoto,bink2w64.OrignalBinkGoto)
+	JMPProxy(FakeBinkIsSoftwareCursor,bink2w64.OrignalBinkIsSoftwareCursor)
+	JMPProxy(FakeBinkLogoAddress,bink2w64.OrignalBinkLogoAddress)
+	JMPProxy(FakeBinkNextFrame,bink2w64.OrignalBinkNextFrame)
+	JMPProxy(FakeBinkOpen,bink2w64.OrignalBinkOpen)
+	JMPProxy(FakeBinkOpenDirectSound,bink2w64.OrignalBinkOpenDirectSound)
+	JMPProxy(FakeBinkOpenMiles,bink2w64.OrignalBinkOpenMiles)
+	JMPProxy(FakeBinkOpenTrack,bink2w64.OrignalBinkOpenTrack)
+	JMPProxy(FakeBinkOpenWaveOut,bink2w64.OrignalBinkOpenWaveOut)
+	JMPProxy(FakeBinkOpenWithOptions,bink2w64.OrignalBinkOpenWithOptions)
+	JMPProxy(FakeBinkOpenXAudio2,bink2w64.OrignalBinkOpenXAudio2)
+	JMPProxy(FakeBinkPause,bink2w64.OrignalBinkPause)
+	JMPProxy(FakeBinkRegisterFrameBuffers,bink2w64.OrignalBinkRegisterFrameBuffers)
+	JMPProxy(FakeBinkRegisterGPUDataBuffers,bink2w64.OrignalBinkRegisterGPUDataBuffers)
+	JMPProxy(FakeBinkRequestStopAsyncThread,bink2w64.OrignalBinkRequestStopAsyncThread)
+	JMPProxy(FakeBinkRestoreCursor,bink2w64.OrignalBinkRestoreCursor)
+	JMPProxy(FakeBinkService,bink2w64.OrignalBinkService)
+	JMPProxy(FakeBinkSetError,bink2w64.OrignalBinkSetError)
+	JMPProxy(FakeBinkSetFileOffset,bink2w64.OrignalBinkSetFileOffset)
+	JMPProxy(FakeBinkSetFrameRate,bink2w64.OrignalBinkSetFrameRate)
+	JMPProxy(FakeBinkSetIO,bink2w64.OrignalBinkSetIO)
+	JMPProxy(FakeBinkSetIOSize,bink2w64.OrignalBinkSetIOSize)
+	JMPProxy(FakeBinkSetMemory,bink2w64.OrignalBinkSetMemory)
+	JMPProxy(FakeBinkSetPan,bink2w64.OrignalBinkSetPan)
+	JMPProxy(FakeBinkSetSimulate,bink2w64.OrignalBinkSetSimulate)
+	JMPProxy(FakeBinkSetSoundOnOff,bink2w64.OrignalBinkSetSoundOnOff)
+	JMPProxy(FakeBinkSetSoundSystem,bink2w64.OrignalBinkSetSoundSystem)
+	JMPProxy(FakeBinkSetSoundSystem2,bink2w64.OrignalBinkSetSoundSystem2)
+	JMPProxy(FakeBinkSetSoundTrack,bink2w64.OrignalBinkSetSoundTrack)
+	JMPProxy(FakeBinkSetSpeakerVolumes,bink2w64.OrignalBinkSetSpeakerVolumes)
+	JMPProxy(FakeBinkSetVideoOnOff,bink2w64.OrignalBinkSetVideoOnOff)
+	JMPProxy(FakeBinkSetVolume,bink2w64.OrignalBinkSetVolume)
+	JMPProxy(FakeBinkSetWillLoop,bink2w64.OrignalBinkSetWillLoop)
+	JMPProxy(FakeBinkShouldSkip,bink2w64.OrignalBinkShouldSkip)
+	JMPProxy(FakeBinkStartAsyncThread,bink2w64.OrignalBinkStartAsyncThread)
+	JMPProxy(FakeBinkUseTelemetry,bink2w64.OrignalBinkUseTelemetry)
+	JMPProxy(FakeBinkUseTmLite,bink2w64.OrignalBinkUseTmLite)
+	JMPProxy(FakeBinkWait,bink2w64.OrignalBinkWait)
+	JMPProxy(FakeBinkWaitStopAsyncThread,bink2w64.OrignalBinkWaitStopAsyncThread)
+	JMPProxy(FakeRADTimerRead,bink2w64.OrignalRADTimerRead)
 }
 
 void setup(){
@@ -271,3 +281,14 @@ void setup(){
 		bink2w64.OrignalBinkWaitStopAsyncThread = GetProcAddress(bink2w64.dll, "BinkWaitStopAsyncThread");
 		bink2w64.OrignalRADTimerRead = GetProcAddress(bink2w64.dll, "RADTimerRead");
 }
+
+int WINAPI DllMain(HMODULE hModule, DWORD reason, void*) {
+	if(reason = DLL_PROCESS_ATTACH && !initialized) {
+		setup();
+		attach(hModule);
+		initialized = true;
+	}
+	return 1;
+}
+
+#endif

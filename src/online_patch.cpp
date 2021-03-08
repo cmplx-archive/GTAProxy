@@ -1,5 +1,5 @@
 #include "minhook/MinHook.h"
-#include "strink.h"
+#include "mystring.h"
 #include <stdint.h>
 #include <Psapi.h>
 #include <TlHelp32.h>
@@ -19,8 +19,6 @@ HANDLE g_uninject_thread = NULL;
 uint64_t netcat_insert_dedupe_addr = 0;
 uint64_t strlen_addr = 0;
 
-int strlen_calls = 0;
-
 MODULEINFO GetModuleInfo(char* szModule) {
 	MODULEINFO modInfo = {0};
 	HMODULE hModule = GetModuleHandleA(szModule);
@@ -38,7 +36,8 @@ uint64_t FindSig(char* module, char* pattern, char* mask) {
 	for(uint64_t i = 0; i < size - patternLength; i++) {
 
 		bool found = true;
-		for(uint64_t j = 0; j < patternLength; j++) found &= mask[j] == '?' || pattern[j] == *(char*)(base + i + j);
+		for(uint64_t j = 0; j < patternLength; j++) 
+			found &= mask[j] == '?' || pattern[j] == *(char*)(base + i + j);
 
 		if(found)
 			return base + i;
@@ -53,8 +52,6 @@ size_t strlen_cacher(char* str) {
 	static char* end = NULL;
 	size_t len = 0;
 	const size_t cap = 20000;
-
-	strlen_calls++;
 
 	// if we have a "cached" string and current pointer is within it
 	if(start && str >= start && str <= end) {
